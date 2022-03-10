@@ -45,8 +45,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "react-native-device-info": "^8.1.2",
-    "underscore": "1.12.1"
+    "react-native-device-info": "^8.1.2"
   },
   "resolutions": {
     "react-native-device-info": "^6.2.1"
