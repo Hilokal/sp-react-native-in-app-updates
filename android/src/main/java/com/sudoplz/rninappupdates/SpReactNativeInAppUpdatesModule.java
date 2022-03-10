@@ -101,6 +101,7 @@ public class SpReactNativeInAppUpdatesModule extends ReactContextBaseJavaModule 
             WritableMap map = Arguments.createMap();
             int availability = appUpdateInfo.updateAvailability();
             map.putInt("updateAvailability", availability);
+            map.putInt("installStatus", appUpdateInfo.installStatus());
             map.putBoolean("isImmediateUpdateAllowed", appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE));
             map.putBoolean("isFlexibleUpdateAllowed", appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE));
             map.putInt("updatePriority", appUpdateInfo.updatePriority());

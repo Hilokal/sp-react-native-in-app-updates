@@ -8,6 +8,7 @@ import {
   AndroidInAppUpdateExtras,
   AndroidStatusEventListener,
   AndroidIntentResultListener,
+  AndroidInstallStatus,
   AndroidStartUpdateOptions,
   AndroidAvailabilityStatus,
   AndroidUpdateType,
@@ -124,6 +125,13 @@ export default class InAppUpdates extends InAppUpdatesBase {
           updateAvailability === AndroidAvailabilityStatus.DEVELOPER_TRIGGERED
         ) {
           this.debugLog('Update has already been triggered by the developer');
+          if (inAppUpdateInfo.installStatus === AndroidInstallStatus.DOWNLOADED) {
+            return {
+              shouldUpdate: true,
+              storeVersion,
+              other: { ...inAppUpdateInfo },
+            };
+          }
         } else {
           this.debugLog(
             `Failed to fetch a store version, status: ${updateAvailability}`

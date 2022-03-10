@@ -54,6 +54,7 @@ export enum AndroidUpdateType {
 
 export type AndroidInAppUpdateExtras = {
   updateAvailability: AndroidAvailabilityStatus;
+  installStatus: AndroidInstallStatus;
   versionCode: number;
   isFlexibleUpdateAllowed: boolean;
   isImmediateUpdateAllowed: boolean;
