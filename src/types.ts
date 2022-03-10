@@ -24,37 +24,14 @@ export type StatusUpdateEvent = {
  */
 export type CheckOptions = {
   /**
-   * The semver of your current app version
+   * The build number of your current app version
    */
-  curVersion?: string;
-
-  /**
-   * This will run right after the store version is fetched in case you want to change it before it's compared as a semver
-   */
-  toSemverConverter?: (
-    version: SemverVersionCode | SemverVersion
-  ) => SemverVersion;
-
-  /**
-   * By default this library uses semver behind the scenes to compare the store version with the curVersion value, but you can pass your own version comparator if you want to
-   */
-  customVersionComparator?: (
-    v1: SemverVersion,
-    v2: SemverVersion
-  ) => -1 | 0 | 1;
-
-  /**
-   * ISO 3166-1 country code (iOS only)
-   */
-  country?: string;
+  curVersion?: number;
 };
-
-export type SemverVersion = string;
-export type SemverVersionCode = number;
 
 export interface NeedsUpdateResponseBase {
   shouldUpdate: boolean;
-  storeVersion: SemverVersion;
+  storeVersion: number;
   reason: string;
 }
 
@@ -77,7 +54,7 @@ export enum AndroidUpdateType {
 
 export type AndroidInAppUpdateExtras = {
   updateAvailability: AndroidAvailabilityStatus;
-  versionCode: SemverVersionCode;
+  versionCode: number;
   isFlexibleUpdateAllowed: boolean;
   isImmediateUpdateAllowed: boolean;
   packageName: string;
