@@ -2,6 +2,7 @@ import InAppUpdatesBase from './InAppUpdatesBase';
 import type {
   CheckOptions,
   IosNeedsUpdateResponse,
+  IosStartUpdateOptions
 } from './types';
 
 const noop = () => {};
