@@ -29,12 +29,6 @@ export type CheckOptions = {
   curVersion?: number;
 };
 
-export interface NeedsUpdateResponseBase {
-  shouldUpdate: boolean;
-  storeVersion: number;
-  reason: string;
-}
-
 export enum AndroidOther {
   IN_APP_UPDATE_RESULT_KEY = 'in_app_update_result',
   IN_APP_UPDATE_STATUS_KEY = 'in_app_update_status',
@@ -63,11 +57,6 @@ export type AndroidInAppUpdateExtras = {
   updatePriority: number;
 };
 
-export interface AndroidNeedsUpdateResponse extends NeedsUpdateResponseBase {
-  other: AndroidInAppUpdateExtras;
-}
-// export interface NeedsUpdateResponse
-
 export type AndroidStatusEventListener = (status: StatusUpdateEvent) => void;
 export type AndroidIntentResultListener = (
   intentResult: InstallationResult
@@ -77,82 +66,4 @@ export type AndroidStartUpdateOptions = {
   updateType: AndroidUpdateType;
 };
 
-export type IosITunesResponse = {
-  screenshotUrls: string[];
-  ipadScreenshotUrls: string[];
-  appletvScreenshotUrls: string[];
-  artworkUrl60: string;
-  artworkUrl512: string;
-  artworkUrl100: string;
-  artistViewUrl: string;
-  supportedDevices: string[];
-  advisories: string[];
-  isGameCenterEnabled: string[];
-  features: string[];
-  kind: string;
-  trackCensoredName: string;
-  languageCodesISO2A: string[];
-  fileSizeBytes: string;
-  contentAdvisoryRating: string;
-  averageUserRatingForCurrentVersion: number;
-  userRatingCountForCurrentVersion: number;
-  averageUserRating: number;
-  trackViewUrl: string;
-  trackContentRating: string;
-  isVppDeviceBasedLicensingEnabled: boolean;
-  trackId: number;
-  trackName: string;
-  releaseDate: string;
-  genreIds: string[];
-  formattedPrice: string;
-  primaryGenreName: string;
-  minimumOsVersion: string;
-  currentVersionReleaseDate: string;
-  releaseNotes: string;
-  primaryGenreId: number;
-  sellerName: string;
-  currency: string;
-  description: string;
-  artistId: number;
-  artistName: string;
-  genres: string[];
-  price: number;
-  bundleId: string;
-  version: string;
-  wrapperType: string;
-  userRatingCount: number;
-};
-
-export interface IosPerformCheckResponse extends IosITunesResponse {
-  updateIsAvailable: boolean;
-}
-
-export interface IosNeedsUpdateResponse extends NeedsUpdateResponseBase {
-  other: IosPerformCheckResponse;
-}
-export type NeedsUpdateResponse =
-  | IosNeedsUpdateResponse
-  | AndroidNeedsUpdateResponse;
-
-type IosStartUpdateOption = {
-  title?: string;
-  message?: string;
-  buttonUpgradeText?: string;
-  buttonCancelText?: string;
-  forceUpgrade?: boolean;
-  updateType?: never;
-  bundleId?: string;
-  country?: string;
-};
-
-type IosStartUpdateOptionWithLocalVersion = IosStartUpdateOption & {
-  localVersion: string;
-};
-
-export type IosStartUpdateOptions = IosStartUpdateOption & {
-  versionSpecificOptions?: Array<IosStartUpdateOptionWithLocalVersion>;
-};
-
-export type StartUpdateOptions =
-  | IosStartUpdateOptions
-  | AndroidStartUpdateOptions;
+export type StartUpdateOptions = AndroidStartUpdateOptions;

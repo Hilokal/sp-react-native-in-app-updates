@@ -1,8 +1,7 @@
 import InAppUpdatesBase from './InAppUpdatesBase';
 import type {
   CheckOptions,
-  IosNeedsUpdateResponse,
-  IosStartUpdateOptions
+  StartUpdateOptions,
 } from './types';
 
 const noop = () => {};
@@ -11,12 +10,12 @@ export default class InAppUpdates extends InAppUpdatesBase {
   public checkNeedsUpdate(
     // @ts-ignore - unused variable
     checkOptions?: CheckOptions
-  ): Promise<IosNeedsUpdateResponse> {
+  ): Promise<any> {
     return Promise.reject(Error("This API isn't available on iOS"));
   }
 
   // @ts-ignore - unused variable
-  startUpdate(updateOptions: IosStartUpdateOptions): Promise<void> {
+  startUpdate(options?: StartUpdateOptions): Promise<void> {
     return Promise.reject(Error("This API isn't available on iOS"));
   }
 

@@ -1,7 +1,8 @@
 /* eslint-disable no-alert */
 import React from 'react';
 import SpInAppUpdates, {
-  NeedsUpdateResponse,
+  AndroidInAppUpdateExtras,
+  IAUAvailabilityStatus,
   IAUUpdateKind,
   StartUpdateOptions,
   StatusUpdateEvent,
@@ -22,7 +23,7 @@ const BUTTON_COLOR = '#46955f';
 const HIGH_PRIORITY_UPDATE = 5; // Arbitrary, depends on how you handle priority in the Play Console
 type AppState = {
   needsUpdate: boolean | null;
-  otherData?: NeedsUpdateResponse | null;
+  otherData?: AndroidInAppUpdateExtras | null;
   error: string | null;
 };
 export default class App extends React.Component<{}, AppState> {
@@ -55,10 +56,10 @@ export default class App extends React.Component<{}, AppState> {
         //   return `${majorVer}.${minorVer}.${patchVersion}`;
         // },
       })
-      .then((result: NeedsUpdateResponse) => {
+      .then((result: AndroidInAppUpdateExtras) => {
         this.setState({
-          needsUpdate: result.shouldUpdate,
-          otherData: result,
+          needsUpdate: result.updateAvailability === IAUAvailabilityStatus.AVAILABLE,
+          otherData: result
         });
       })
       .catch((error) => {
@@ -70,7 +71,7 @@ export default class App extends React.Component<{}, AppState> {
 
   startUpdating = () => {
     if (this.state.needsUpdate) {
-      let updateOptions: StartUpdateOptions = {};
+      let updateOptions: StartUpdateOptions = { updateType: IAUUpdateKind.FLEXIBLE }
       if (Platform.OS === 'android' && this.state.otherData) {
         const { otherData } = this.state || {
           otherData: null,

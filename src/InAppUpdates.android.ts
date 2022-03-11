@@ -1,18 +1,13 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
-import { getBuildNumber } from 'react-native-device-info';
 
 import {
   StatusUpdateEvent,
-  CheckOptions,
   InstallationResult,
   AndroidInAppUpdateExtras,
   AndroidStatusEventListener,
   AndroidIntentResultListener,
-  AndroidInstallStatus,
   AndroidStartUpdateOptions,
-  AndroidAvailabilityStatus,
   AndroidUpdateType,
-  AndroidNeedsUpdateResponse,
 } from './types';
 import InAppUpdatesBase from './InAppUpdatesBase';
 
@@ -85,69 +80,11 @@ export default class InAppUpdates extends InAppUpdatesBase {
   /**
    * Checks if there are any updates available.
    */
-  public checkNeedsUpdate = (
-    checkOptions?: CheckOptions
-  ): Promise<AndroidNeedsUpdateResponse> => {
-    const { curVersion } = checkOptions || {};
-
-    let appVersion: number;
-    if (curVersion == null) {
-      appVersion = parseInt(getBuildNumber(), 10);
-    } else {
-      appVersion = curVersion;
-    }
-    this.debugLog('Checking store version (Android)');
-    return SpInAppUpdates.checkNeedsUpdate()
-      .then((inAppUpdateInfo: AndroidInAppUpdateExtras) => {
-        const { updateAvailability, versionCode: storeVersion } = inAppUpdateInfo || {};
-        if (updateAvailability === AndroidAvailabilityStatus.AVAILABLE) {
-          if (storeVersion > appVersion) {
-            this.debugLog(
-              `Compared cur version (${appVersion}) with store version (${storeVersion}). The store version is higher!`
-            );
-            // play store version is higher than the current version
-            return {
-              shouldUpdate: true,
-              storeVersion,
-              other: { ...inAppUpdateInfo },
-            };
-          }
-          this.debugLog(
-            `Compared cur version (${appVersion}) with store version (${storeVersion}). The current version is higher!`
-          );
-          return {
-            shouldUpdate: false,
-            storeVersion,
-            reason: `current version (${appVersion}) is already later than the latest store version (${storeVersion})`,
-            other: { ...inAppUpdateInfo },
-          };
-        } else if (
-          updateAvailability === AndroidAvailabilityStatus.DEVELOPER_TRIGGERED
-        ) {
-          this.debugLog('Update has already been triggered by the developer');
-          if (inAppUpdateInfo.installStatus === AndroidInstallStatus.DOWNLOADED) {
-            return {
-              shouldUpdate: true,
-              storeVersion,
-              other: { ...inAppUpdateInfo },
-            };
-          }
-        } else {
-          this.debugLog(
-            `Failed to fetch a store version, status: ${updateAvailability}`
-          );
-        }
-
-        return {
-          shouldUpdate: false,
-          reason: `status: ${updateAvailability} means there's no new version available`,
-          other: { ...inAppUpdateInfo },
-        };
-      })
-      .catch((err: any) => {
-        this.debugLog(err);
-        this.throwError(err, 'checkNeedsUpdate');
-      });
+  public checkNeedsUpdate = (): Promise<AndroidInAppUpdateExtras> => {
+    return SpInAppUpdates.checkNeedsUpdate().catch((err: any) => {
+      this.debugLog(err);
+      this.throwError(err, 'checkNeedsUpdate');
+    });
   };
 
   /**

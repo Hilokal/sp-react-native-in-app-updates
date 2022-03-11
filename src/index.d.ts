@@ -1,9 +1,9 @@
 import type {
   StartUpdateOptions,
-  NeedsUpdateResponse,
   CheckOptions,
   AndroidIntentResultListener,
   AndroidStatusEventListener,
+  AndroidInAppUpdateExtras
 } from './types';
 
 export * from './types';
@@ -20,7 +20,7 @@ declare class SpInAppUpdates {
 
   public checkNeedsUpdate(
     checkOptions?: CheckOptions
-  ): Promise<NeedsUpdateResponse>;
+  ): Promise<AndroidInAppUpdateExtras>;
 
   public startUpdate(updateOptions: StartUpdateOptions): Promise<void>;
 
