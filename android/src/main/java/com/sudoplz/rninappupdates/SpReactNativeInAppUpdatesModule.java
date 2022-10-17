@@ -139,20 +139,25 @@ public class SpReactNativeInAppUpdatesModule extends ReactContextBaseJavaModule 
             } else if (!appUpdateInfo.isUpdateTypeAllowed(updateType)) {
                 resolutionPromise.reject("Error", "Update type unavailable, check checkNeedsUpdate.isImmediateUpdateAllowed or checkNeedsUpdate.isFlexibleUpdateAllowed first.");
             } else {
-                try {
-                    appUpdateManager.startUpdateFlowForResult(
-                        // Pass the intent that is returned by 'getAppUpdateInfo()'.
-                        appUpdateInfo,
-                        // 'AppUpdateType.IMMEDIATE' Or 'AppUpdateType.FLEXIBLE'
-                        updateType,
-                        // The current activity making the update request.
-                        getCurrentActivity(),
-                        // Include a request code to later monitor this update request.
-                        IN_APP_UPDATE_REQUEST_CODE
-                    );
-                    resolutionPromise.resolve("Done");
-                } catch (IntentSender.SendIntentException e) {
-                    resolutionPromise.reject("SendIntentException","Error while starting the update flow: "+e.toString());
+                Activity activity = getCurrentActivity();
+                if (activity == null) {
+                    resolutionPromise.reject("Error", "Can't start update without a current Activity. App may be in background.");
+                } else {
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // 'AppUpdateType.IMMEDIATE' Or 'AppUpdateType.FLEXIBLE'
+                            updateType,
+                            // The current activity making the update request.
+                            activity,
+                            // Include a request code to later monitor this update request.
+                            IN_APP_UPDATE_REQUEST_CODE
+                        );
+                        resolutionPromise.resolve("Done");
+                    } catch (IntentSender.SendIntentException e) {
+                        resolutionPromise.reject("SendIntentException","Error while starting the update flow: "+e.toString());
+                    }
                 }
             }
         });
